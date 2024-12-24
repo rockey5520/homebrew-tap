@@ -52,6 +52,10 @@ jobs:
           echo "sha_darwin_amd64=$SHA_DARWIN_AMD64" >> $GITHUB_ENV
           echo "sha_linux_arm64=$SHA_LINUX_ARM64" >> $GITHUB_ENV
           echo "sha_linux_amd64=$SHA_LINUX_AMD64" >> $GITHUB_ENV
+          echo "SHA256 for darwin_arm64: $SHA_DARWIN_ARM64"
+          echo "SHA256 for darwin_amd64: $SHA_DARWIN_AMD64"
+          echo "SHA256 for linux_arm64: $SHA_LINUX_ARM64"
+          echo "SHA256 for linux_amd64: $SHA_LINUX_AMD64"          
 
       # Step 5: Update Homebrew Formula
       - name: Update Formula
