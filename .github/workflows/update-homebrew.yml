@@ -4,6 +4,16 @@ on:
   repository_dispatch:
     types:
       - update_formula
+  workflow_dispatch:
+    inputs:
+        tag:
+          description: 'Tag of the release'
+          required: true
+          default: ''
+        version:
+          description: 'Version of the release'
+          required: true
+          default: ''  
 
 jobs:
   update-formula:
