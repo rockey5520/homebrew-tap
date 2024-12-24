@@ -25,10 +25,10 @@ jobs:
       - name: Download Release Files
         run: |
           mkdir -p dist
-          wget -O dist/snake-game_darwin_arm64.tar.gz "https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_darwin_arm64.tar.gz"
-          wget -O dist/snake-game_darwin_amd64.tar.gz "https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_darwin_amd64.tar.gz"
-          wget -O dist/snake-game_linux_arm64.tar.gz "https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_linux_arm64.tar.gz"
-          wget -O dist/snake-game_linux_amd64.tar.gz "https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_linux_amd64.tar.gz"
+          wget -O dist/snake-game_darwin_arm64.tar.gz "https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_darwin_arm64.tar.gz"
+          wget -O dist/snake-game_darwin_amd64.tar.gz "https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_darwin_amd64.tar.gz"
+          wget -O dist/snake-game_linux_arm64.tar.gz "https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_linux_arm64.tar.gz"
+          wget -O dist/snake-game_linux_amd64.tar.gz "https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_linux_amd64.tar.gz"
 
       # Step 4: Calculate SHA256
       - name: Calculate SHA256
@@ -48,13 +48,13 @@ jobs:
       - name: Update Formula
         run: |
           sed -i "s/version \".*\"/version \"${{ env.version }}\"/" Formula/snake-game.rb
-          sed -i "s|url .*darwin_arm64.*|url \"https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_darwin_arm64.tar.gz\"|" Formula/snake-game.rb
+          sed -i "s|url .*darwin_arm64.*|url \"https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_darwin_arm64.tar.gz\"|" Formula/snake-game.rb
           sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_darwin_arm64 }}\"/" Formula/snake-game.rb
-          sed -i "s|url .*darwin_amd64.*|url \"https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_darwin_amd64.tar.gz\"|" Formula/snake-game.rb
+          sed -i "s|url .*darwin_amd64.*|url \"https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_darwin_amd64.tar.gz\"|" Formula/snake-game.rb
           sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_darwin_amd64 }}\"/" Formula/snake-game.rb
-          sed -i "s|url .*linux_arm64.*|url \"https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_linux_arm64.tar.gz\"|" Formula/snake-game.rb
+          sed -i "s|url .*linux_arm64.*|url \"https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_linux_arm64.tar.gz\"|" Formula/snake-game.rb
           sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_linux_arm64 }}\"/" Formula/snake-game.rb
-          sed -i "s|url .*linux_amd64.*|url \"https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_linux_amd64.tar.gz\"|" Formula/snake-game.rb
+          sed -i "s|url .*linux_amd64.*|url \"https://github.com/rockey5520/snake-game-distributions//releases/${{ env.tag }}/snake-game_${{ env.version }}_linux_amd64.tar.gz\"|" Formula/snake-game.rb
           sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_linux_amd64 }}\"/" Formula/snake-game.rb
 
       # Step 6: Commit and Push
