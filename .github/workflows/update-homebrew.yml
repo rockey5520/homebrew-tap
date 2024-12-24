@@ -35,10 +35,11 @@ jobs:
       - name: Download Release Files
         run: |
           mkdir -p dist
-          wget "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_darwin_arm64.tar.gz"
-          wget "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_darwin_amd64.tar.gz"
-          wget "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_linux_arm64.tar.gz"
-          wget "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_linux_amd64.tar.gz"
+          wget -O dist/snake-game_darwin_arm64.tar.gz "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_darwin_arm64.tar.gz"
+          wget -O dist/snake-game_darwin_amd64.tar.gz "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_darwin_amd64.tar.gz"
+          wget -O dist/snake-game_linux_arm64.tar.gz "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_linux_arm64.tar.gz"
+          wget -O dist/snake-game_linux_amd64.tar.gz "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_linux_amd64.tar.gz"
+
 
       # Step 4: Calculate SHA256
       - name: Calculate SHA256
