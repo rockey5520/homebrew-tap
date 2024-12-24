@@ -35,28 +35,38 @@ jobs:
       - name: Download Release Files
         run: |
           mkdir -p dist
-          wget -O dist/snake-game_darwin_arm64.tar.gz "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_darwin_arm64.tar.gz"
-          wget -O dist/snake-game_darwin_amd64.tar.gz "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_darwin_amd64.tar.gz"
-          wget -O dist/snake-game_linux_arm64.tar.gz "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_linux_arm64.tar.gz"
-          wget -O dist/snake-game_linux_amd64.tar.gz "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_linux_amd64.tar.gz"
+          wget -O "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_darwin_arm64.tar.gz"
+          wget -O "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_darwin_amd64.tar.gz"
+          wget -O "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_linux_arm64.tar.gz"
+          wget -O "https://raw.githubusercontent.com/rockey5520/snake-game-distributions/main/releases/${{ env.TAG }}/snake-game_${{ env.VERSION }}_linux_amd64.tar.gz"
 
       # Step 4: Calculate SHA256
       - name: Calculate SHA256
         id: calculate_sha
         run: |
-          echo "Calculating SHA256 checksums..."
-          SHA_DARWIN_ARM64=$(sha256sum dist/snake-game_darwin_arm64.tar.gz | awk '{print $1}')
-          SHA_DARWIN_AMD64=$(sha256sum dist/snake-game_darwin_amd64.tar.gz | awk '{print $1}')
-          SHA_LINUX_ARM64=$(sha256sum dist/snake-game_linux_arm64.tar.gz | awk '{print $1}')
-          SHA_LINUX_AMD64=$(sha256sum dist/snake-game_linux_amd64.tar.gz | awk '{print $1}')
-          echo "sha_darwin_arm64=$SHA_DARWIN_ARM64" >> $GITHUB_ENV
-          echo "sha_darwin_amd64=$SHA_DARWIN_AMD64" >> $GITHUB_ENV
-          echo "sha_linux_arm64=$SHA_LINUX_ARM64" >> $GITHUB_ENV
-          echo "sha_linux_amd64=$SHA_LINUX_AMD64" >> $GITHUB_ENV
-          echo "SHA256 for darwin_arm64: $SHA_DARWIN_ARM64"
-          echo "SHA256 for darwin_amd64: $SHA_DARWIN_AMD64"
-          echo "SHA256 for linux_arm64: $SHA_LINUX_ARM64"
-          echo "SHA256 for linux_amd64: $SHA_LINUX_AMD64"
+         echo "Calculating SHA256 checksums..."
+         ls -l dist/
+         echo "Contents of dist/snake-game_darwin_arm64.tar.gz:"
+         sha256sum dist/snake-game_darwin_arm64.tar.gz
+         echo "Contents of dist/snake-game_darwin_amd64.tar.gz:"
+         sha256sum dist/snake-game_darwin_amd64.tar.gz
+         echo "Contents of dist/snake-game_linux_arm64.tar.gz:"
+         sha256sum dist/snake-game_linux_arm64.tar.gz
+         echo "Contents of dist/snake-game_linux_amd64.tar.gz:"
+         sha256sum dist/snake-game_linux_amd64.tar.gz
+    
+         SHA_DARWIN_ARM64=$(sha256sum dist/snake-game_darwin_arm64.tar.gz | awk '{print $1}')
+         SHA_DARWIN_AMD64=$(sha256sum dist/snake-game_darwin_amd64.tar.gz | awk '{print $1}')
+         SHA_LINUX_ARM64=$(sha256sum dist/snake-game_linux_arm64.tar.gz | awk '{print $1}')
+         SHA_LINUX_AMD64=$(sha256sum dist/snake-game_linux_amd64.tar.gz | awk '{print $1}')
+         echo "sha_darwin_arm64=$SHA_DARWIN_ARM64" >> $GITHUB_ENV
+         echo "sha_darwin_amd64=$SHA_DARWIN_AMD64" >> $GITHUB_ENV
+         echo "sha_linux_arm64=$SHA_LINUX_ARM64" >> $GITHUB_ENV
+         echo "sha_linux_amd64=$SHA_LINUX_AMD64" >> $GITHUB_ENV
+         echo "SHA256 for darwin_arm64: $SHA_DARWIN_ARM64"
+         echo "SHA256 for darwin_amd64: $SHA_DARWIN_AMD64"
+         echo "SHA256 for linux_arm64: $SHA_LINUX_ARM64"
+         echo "SHA256 for linux_amd64: $SHA_LINUX_AMD64"
 
       # Step 5: Update Homebrew Formula
       - name: Update Formula
