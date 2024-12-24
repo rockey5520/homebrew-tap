@@ -30,15 +30,14 @@ jobs:
           echo "Fetching release metadata..."
           echo "version=${{ github.event.client_payload.version }}" >> $GITHUB_ENV
           echo "tag=${{ github.event.client_payload.tag }}" >> $GITHUB_ENV
-
       # Step 3: Download Release Files
       - name: Download Release Files
         run: |
-          mkdir -p dist
-          wget -O dist/snake-game_darwin_arm64.tar.gz "https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_darwin_arm64.tar.gz"
-          wget -O dist/snake-game_darwin_amd64.tar.gz "https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_darwin_amd64.tar.gz"
-          wget -O dist/snake-game_linux_arm64.tar.gz "https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_linux_arm64.tar.gz"
-          wget -O dist/snake-game_linux_amd64.tar.gz "https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_linux_amd64.tar.gz"
+         mkdir -p dist
+         wget -O dist/snake-game_darwin_arm64.tar.gz "https://github.com/rockey5520/snake-game-distributions/releases/${{ github.event.inputs.tag || github.event.client_payload.tag }}/snake-game_${{ github.event.inputs.version || github.event.client_payload.version }}_darwin_arm64.tar.gz"
+         wget -O dist/snake-game_darwin_amd64.tar.gz "https://github.com/rockey5520/snake-game-distributions/releases/${{ github.event.inputs.tag || github.event.client_payload.tag }}/snake-game_${{ github.event.inputs.version || github.event.client_payload.version }}_darwin_amd64.tar.gz"
+         wget -O dist/snake-game_linux_arm64.tar.gz "https://github.com/rockey5520/snake-game-distributions/releases/${{ github.event.inputs.tag || github.event.client_payload.tag }}/snake-game_${{ github.event.inputs.version || github.event.client_payload.version }}_linux_arm64.tar.gz"
+         wget -O dist/snake-game_linux_amd64.tar.gz "https://github.com/rockey5520/snake-game-distributions/releases/${{ github.event.inputs.tag || github.event.client_payload.tag }}/snake-game_${{ github.event.inputs.version || github.event.client_payload.version }}_linux_amd64.tar.gz"          
 
       # Step 4: Calculate SHA256
       - name: Calculate SHA256
@@ -57,16 +56,15 @@ jobs:
       # Step 5: Update Homebrew Formula
       - name: Update Formula
         run: |
-          sed -i "s/version \".*\"/version \"${{ env.version }}\"/" Formula/snake-game.rb
-          sed -i "s|url .*darwin_arm64.*|url \"https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_darwin_arm64.tar.gz\"|" Formula/snake-game.rb
-          sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_darwin_arm64 }}\"/" Formula/snake-game.rb
-          sed -i "s|url .*darwin_amd64.*|url \"https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_darwin_amd64.tar.gz\"|" Formula/snake-game.rb
-          sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_darwin_amd64 }}\"/" Formula/snake-game.rb
-          sed -i "s|url .*linux_arm64.*|url \"https://github.com/rockey5520/snake-game-distributions/releases/${{ env.tag }}/snake-game_${{ env.version }}_linux_arm64.tar.gz\"|" Formula/snake-game.rb
-          sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_linux_arm64 }}\"/" Formula/snake-game.rb
-          sed -i "s|url .*linux_amd64.*|url \"https://github.com/rockey5520/snake-game-distributions//releases/${{ env.tag }}/snake-game_${{ env.version }}_linux_amd64.tar.gz\"|" Formula/snake-game.rb
-          sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_linux_amd64 }}\"/" Formula/snake-game.rb
-
+         sed -i "s/version \".*\"/version \"${{ github.event.inputs.version || github.event.client_payload.version }}\"/" Formula/snake-game.rb
+         sed -i "s|url .*darwin_arm64.*|url \"https://github.com/rockey5520/snake-game-distributions/releases/${{ github.event.inputs.tag || github.event.client_payload.tag }}/snake-game_${{ github.event.inputs.version || github.event.client_payload.version }}_darwin_arm64.tar.gz\"|" Formula/snake-game.rb
+         sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_darwin_arm64 }}\"/" Formula/snake-game.rb
+         sed -i "s|url .*darwin_amd64.*|url \"https://github.com/rockey5520/snake-game-distributions/releases/${{ github.event.inputs.tag || github.event.client_payload.tag }}/snake-game_${{ github.event.inputs.version || github.event.client_payload.version }}_darwin_amd64.tar.gz\"|" Formula/snake-game.rb
+         sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_darwin_amd64 }}\"/" Formula/snake-game.rb
+         sed -i "s|url .*linux_arm64.*|url \"https://github.com/rockey5520/snake-game-distributions/releases/${{ github.event.inputs.tag || github.event.client_payload.tag }}/snake-game_${{ github.event.inputs.version || github.event.client_payload.version }}_linux_arm64.tar.gz\"|" Formula/snake-game.rb
+         sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_linux_arm64 }}\"/" Formula/snake-game.rb
+         sed -i "s|url .*linux_amd64.*|url \"https://github.com/rockey5520/snake-game-distributions/releases/${{ github.event.inputs.tag || github.event.client_payload.tag }}/snake-game_${{ github.event.inputs.version || github.event.client_payload.version }}_linux_amd64.tar.gz\"|" Formula/snake-game.rb
+         sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_linux_amd64 }}\"/" Formula/snake-game.rb
       # Step 6: Commit and Push
       - name: Commit and Push Changes
         run: |
