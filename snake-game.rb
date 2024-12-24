@@ -1,67 +1,35 @@
-name: Update Homebrew Formula
-
-on:
-  repository_dispatch:
-    types:
-      - update_formula
-
-jobs:
-  update-formula:
-    runs-on: ubuntu-latest
-
-    steps:
-      # Step 1: Checkout Public Repository
-      - name: Checkout Public Repository
-        uses: actions/checkout@v4
-
-      # Step 2: Fetch Tag and Metadata
-      - name: Fetch Trigger Data
-        run: |
-          echo "Fetching release metadata..."
-          echo "version=${{ github.event.client_payload.version }}" >> $GITHUB_ENV
-          echo "tag=${{ github.event.client_payload.tag }}" >> $GITHUB_ENV
-
-      # Step 3: Download Release Files
-      - name: Download Release Files
-        run: |
-          mkdir -p dist
-          wget -O dist/snake-game_darwin_arm64.tar.gz "https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_darwin_arm64.tar.gz"
-          wget -O dist/snake-game_darwin_amd64.tar.gz "https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_darwin_amd64.tar.gz"
-          wget -O dist/snake-game_linux_arm64.tar.gz "https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_linux_arm64.tar.gz"
-          wget -O dist/snake-game_linux_amd64.tar.gz "https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_linux_amd64.tar.gz"
-
-      # Step 4: Calculate SHA256
-      - name: Calculate SHA256
-        id: calculate_sha
-        run: |
-          echo "Calculating SHA256 checksums..."
-          SHA_DARWIN_ARM64=$(sha256sum dist/snake-game_darwin_arm64.tar.gz | awk '{print $1}')
-          SHA_DARWIN_AMD64=$(sha256sum dist/snake-game_darwin_amd64.tar.gz | awk '{print $1}')
-          SHA_LINUX_ARM64=$(sha256sum dist/snake-game_linux_arm64.tar.gz | awk '{print $1}')
-          SHA_LINUX_AMD64=$(sha256sum dist/snake-game_linux_amd64.tar.gz | awk '{print $1}')
-          echo "sha_darwin_arm64=$SHA_DARWIN_ARM64" >> $GITHUB_ENV
-          echo "sha_darwin_amd64=$SHA_DARWIN_AMD64" >> $GITHUB_ENV
-          echo "sha_linux_arm64=$SHA_LINUX_ARM64" >> $GITHUB_ENV
-          echo "sha_linux_amd64=$SHA_LINUX_AMD64" >> $GITHUB_ENV
-
-      # Step 5: Update Homebrew Formula
-      - name: Update Formula
-        run: |
-          sed -i "s/version \".*\"/version \"${{ env.version }}\"/" Formula/snake-game.rb
-          sed -i "s|url .*darwin_arm64.*|url \"https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_darwin_arm64.tar.gz\"|" Formula/snake-game.rb
-          sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_darwin_arm64 }}\"/" Formula/snake-game.rb
-          sed -i "s|url .*darwin_amd64.*|url \"https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_darwin_amd64.tar.gz\"|" Formula/snake-game.rb
-          sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_darwin_amd64 }}\"/" Formula/snake-game.rb
-          sed -i "s|url .*linux_arm64.*|url \"https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_linux_arm64.tar.gz\"|" Formula/snake-game.rb
-          sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_linux_arm64 }}\"/" Formula/snake-game.rb
-          sed -i "s|url .*linux_amd64.*|url \"https://github.com/rockey5520/snake-game/releases/download/${{ env.tag }}/snake-game_${{ env.version }}_linux_amd64.tar.gz\"|" Formula/snake-game.rb
-          sed -i "s/sha256 \".*\"/sha256 \"${{ env.sha_linux_amd64 }}\"/" Formula/snake-game.rb
-
-      # Step 6: Commit and Push
-      - name: Commit and Push Changes
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add Formula/snake-game.rb
-          git commit -m "Update formula for version ${{ env.version }}"
-          git push
+class SnakeGame < Formula
+    desc "A fun terminal-based snake game written in Go"
+    homepage "https://github.com/rockey5520/snake-game"
+    version "1.0.8"
+    license "MIT"
+  
+    on_macos do
+      if Hardware::CPU.arm?
+        url "https://github.com/rockey5520/snake-game/releases/download/v1.0.8/snake-game_1.0.8_darwin_arm64.tar.gz"
+        sha256 "930d425e7c8236d924421c9f1e2e355230ea2b1b6ac097fdd539ccb53a57eac1"
+      else
+        url "https://github.com/rockey5520/snake-game/releases/download/v1.0.8/snake-game_1.0.8_darwin_amd64.tar.gz"
+        sha256 "c0f3c872e3debbd1ea77eade9bf298477b6265a285aca9064eb3ef2fa62a31fe"
+      end
+    end
+  
+    on_linux do
+      if Hardware::CPU.arm?
+        url "https://github.com/rockey5520/snake-game/releases/download/v1.0.8/snake-game_1.0.8_linux_arm64.tar.gz"
+        sha256 "9fdd7811c4a13fd5db949556fe08594bb02e657976f0f19b01894ca53e50114d"
+      else
+        url "https://github.com/rockey5520/snake-game/releases/download/v1.0.8/snake-game_1.0.8_linux_amd64.tar.gz"
+        sha256 "f03d7fae5b55c0fc9058cbd7786740246f804dbbee8e0956518f430ec876a0b6"
+      end
+    end
+  
+    def install
+      bin.install "snake-game"
+    end
+  
+    test do
+      assert_match "usage", shell_output("#{bin}/snake-game --help")
+    end
+  end
+  
